@@ -3,60 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Tourism Day - Asia Digital Itinerary App</title>
+  <title>Asia Digital Itinerary App - World Tourism Day</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-    .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    h1 { color: #0d5c75; text-align: center; margin-bottom: 5px; }
-    p.subtitle { text-align: center; color: #666; margin-bottom: 25px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
-    .form-group { display: flex; flex-direction: column; }
-    label { font-weight: 600; margin-bottom: 8px; color: #444; }
-    select, input { padding: 12px; border: 1fr solid #ccc; border-radius: 6px; font-size: 15px; }
-    button.btn-generate { width: 100%; background-color: #0d5c75; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-    button.btn-generate:hover { background-color: #094356; }
-    .results-section { margin-top: 35px; display: none; }
-    .itinerary-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .itinerary-table th, .itinerary-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-    .itinerary-table th { background-color: #e6f2f5; color: #0d5c75; }
-    .badge { background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-    .actions { margin-top: 20px; text-align: right; }
-    .btn-print { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --accent: #f59e0b;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      --glass-bg: rgba(255, 255, 255, 0.95);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+    body { background: var(--bg-gradient); min-height: 100vh; padding: 15px; color: #1e293b; display: flex; justify-content: center; align-items: center; }
+
+    .app-card {
+      width: 100%;
+      max-width: 850px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--glass-border);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header { text-align: center; margin-bottom: 25px; }
+    .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    p.subtitle { color: #64748b; font-size: 14px; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 13px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 6px; }
+    
+    select, input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #0f172a;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    select:focus, input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15); }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:active { transform: scale(0.98); }
+
+    /* Results Timeline Styling */
+    .results-wrap { margin-top: 30px; display: none; }
+    .result-header {
+      background: #0f172a;
+      color: white;
+      padding: 18px 20px;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .result-header h2 { font-size: 18px; font-weight: 700; }
+    .meta-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { background: rgba(255, 255, 255, 0.15); font-size: 12px; padding: 4px 10px; border-radius: 20px; color: #e2e8f0; }
+
+    .timeline { background: #fff; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 16px 16px; padding: 20px; }
+    .day-card { border-left: 3px solid var(--primary); padding-left: 16px; margin-bottom: 24px; position: relative; }
+    .day-card:last-child { margin-bottom: 0; }
+    .day-title { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    
+    .slot-item { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+    .slot-badge { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; width: 85px; text-align: center; flex-shrink: 0; }
+    .morning { background: #fef3c7; color: #b45309; }
+    .afternoon { background: #e0f2fe; color: #0369a1; }
+    .evening { background: #f3e8ff; color: #6b21a8; }
+    .slot-desc { font-size: 13.5px; color: #334155; line-height: 1.4; font-weight: 500; }
+
+    .action-bar { margin-top: 20px; display: flex; justify-content: flex-end; }
+    .btn-print { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .app-card { box-shadow: none; border: none; padding: 0; }
+      .form-grid, .btn-submit, .action-bar, .header { display: none; }
+      .results-wrap { display: block !important; margin-top: 0; }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🌍 Asia Travel Itinerary Generator</h1>
-  <p class="subtitle">World Tourism Day Celebration Project</p>
+<div class="app-card">
+  <div class="header">
+    <div class="badge-tag"><i class="fa-solid fa-earth-asia"></i> World Tourism Day Project</div>
+    <h1>Asia Digital Itinerary App</h1>
+    <p class="subtitle">Customized travel route planner designed exclusively for Asian destinations.</p>
+  </div>
 
   <form id="itineraryForm">
     <div class="form-grid">
-      <div class="form-group">
-        <label for="destination">Asian Destination / Country</label>
+      <div class="input-group">
+        <label for="destination"><i class="fa-solid fa-location-dot" style="color:var(--primary)"></i> Asian Destination</label>
         <select id="destination" required>
-          <option value="">Select Destination</option>
-          <option value="Japan">Japan</option>
-          <option value="Thailand">Thailand</option>
-          <option value="India">India</option>
-          <option value="Indonesia">Indonesia (Bali)</option>
-          <option value="Vietnam">Vietnam</option>
-          <option value="Sri Lanka">Sri Lanka</option>
-          <option value="Nepal">Nepal</option>
+          <option value="">Choose Country</option>
+          <option value="Japan">Japan 🇯🇵</option>
+          <option value="Thailand">Thailand 🇹🇭</option>
+          <option value="India">India 🇮🇳</option>
+          <option value="Indonesia">Indonesia (Bali) 🇮🇩</option>
+          <option value="Vietnam">Vietnam 🇻🇳</option>
+          <option value="Sri Lanka">Sri Lanka 🇱🇰</option>
+          <option value="Nepal">Nepal 🇳🇵</option>
+          <option value="Singapore">Singapore 🇸🇬</option>
+          <option value="Malaysia">Malaysia 🇲🇾</option>
+          <option value="South Korea">South Korea 🇰🇷</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="gender">Type of Traveller</label>
+      <div class="input-group">
+        <label for="gender"><i class="fa-solid fa-user" style="color:var(--primary)"></i> Traveller Type</label>
         <select id="gender" required>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="purpose">Purpose of Visit</label>
+      <div class="input-group">
+        <label for="purpose"><i class="fa-solid fa-compass" style="color:var(--primary)"></i> Purpose of Visit</label>
         <select id="purpose" required>
           <option value="Sports & Adventure">Sports & Adventure</option>
           <option value="Spiritual Tourism">Spiritual Tourism</option>
@@ -66,64 +185,63 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="days">Number of Days (1-7)</label>
+      <div class="input-group">
+        <label for="days"><i class="fa-solid fa-calendar-days" style="color:var(--primary)"></i> Duration (Days)</label>
         <input type="number" id="days" min="1" max="7" value="3" required>
       </div>
     </div>
 
-    <button type="submit" class="btn-generate">Generate Custom Itinerary</button>
+    <button type="submit" class="btn-submit">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Custom Itinerary
+    </button>
   </form>
 
-  <div id="results" class="results-section">
-    <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-    <h2 id="resultTitle" style="color: #0d5c75;">Customized Itinerary</h2>
-    <p id="resultMeta"></p>
+  <div id="results" class="results-wrap">
+    <div class="result-header">
+      <h2 id="resultTitle">Itinerary Details</h2>
+      <div class="meta-pills">
+        <span class="pill" id="pillGender"></span>
+        <span class="pill" id="pillPurpose"></span>
+        <span class="pill" id="pillDays"></span>
+      </div>
+    </div>
 
-    <table class="itinerary-table">
-      <thead>
-        <tr>
-          <th>Day</th>
-          <th>Time Slot</th>
-          <th>Activity & Highlights</th>
-        </tr>
-      </thead>
-      <tbody id="itineraryBody"></tbody>
-    </table>
+    <div class="timeline" id="timelineContent"></div>
 
-    <div class="actions">
-      <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    <div class="action-bar">
+      <button class="btn-print" onclick="window.print()">
+        <i class="fa-solid fa-file-pdf"></i> Download PDF / Print
+      </button>
     </div>
   </div>
 </div>
 
 <script>
-  // Activity Database tailored for Asian Continent & Purpose
   const activityData = {
     "Sports & Adventure": [
-      { morning: "Trekking / Trail Exploration", afternoon: "Water Sports / Ziplining", evening: "Campfire & Outdoor Social" },
-      { morning: "Mountain Biking Excursion", afternoon: "White Water Rafting", evening: "Local Night Market Exploration" },
-      { morning: "Rock Climbing Session", afternoon: "ATV Jungle Safari", evening: "Sunset Viewpoint Hike" }
+      { morning: "Sunrise Mountain Trekking & Wildlife Trail", afternoon: "White Water Rafting / Zip-line Canopy Adventure", evening: "Outdoor Campfire & Local Social Meetup" },
+      { morning: "Mountain Biking Excursion through Rural Trails", afternoon: "ATV Jungle Safari & Waterfall Rappelling", evening: "Night Market Street Food Exploration" },
+      { morning: "Deep Sea Kayaking / Rock Climbing Session", afternoon: "Off-Road Dune/Trail Buggy Safari", evening: "Panoramic Sunset Viewpoint Hike" }
     ],
     "Spiritual Tourism": [
-      { morning: "Morning Temple / Shrine Visit", afternoon: "Guided Cultural Heritage Tour", evening: "Evening Prayer & Chanting Ceremony" },
-      { morning: "Meditation at Ancient Monastery", afternoon: "Sacred River / Site Visit", evening: "Cultural Spiritual Performance" },
-      { morning: "Pilgrimage Route Walking Tour", afternoon: "Philosophical & Historical Lecture", evening: "Lantern Lighting Experience" }
+      { morning: "Morning Shrine/Temple Prayer & Chanting", afternoon: "Guided Sacred Heritage & Architecture Walk", evening: "Traditional Evening Lamp & River Ceremony" },
+      { morning: "Meditation & Mindful Yoga at Ancient Monastery", afternoon: "Historical Spiritual Site & Relic Visit", evening: "Cultural Folk Performance & Reflection" },
+      { morning: "Sacred Pilgrimage Walking Tour", afternoon: "Philosophy Session with Local Cultural Experts", evening: "Lantern Lighting & Peace Meditation" }
     ],
     "Leisure": [
-      { morning: "Relaxed Breakfast & City Walk", afternoon: "Shopping & Local Cuisine Tasting", evening: "Sunset Cruise & Dinner" },
-      { morning: "Museum & Art Gallery Visit", afternoon: "Cafe Hopping & Souvenir Shopping", evening: "Traditional Music Show" },
-      { morning: "Scenic Park / Botanical Garden Visit", afternoon: "Local Craft Workshop", evening: "Rooftop Dining Experience" }
+      { morning: "Relaxed Gourmet Breakfast & Old Town Walk", afternoon: "Boutique Shopping & Local Cuisine Tasting", evening: "Sunset Coastal Cruise with Dinner" },
+      { morning: "Art Gallery & National Museum Tour", afternoon: "Artisanal Cafe Hopping & Craft Shopping", evening: "Traditional Music & Theater Show" },
+      { morning: "Scenic Botanical Gardens & Lake Walk", afternoon: "Local Handicraft & Cooking Workshop", evening: "Skyline Rooftop Dining Experience" }
     ],
     "Yoga & Wellness": [
-      { morning: "Sunrise Pranayama & Hatha Yoga", afternoon: "Organic Plant-based Lunch & Spa", evening: "Guided Sound Bath & Meditation" },
-      { morning: "Vinyasa Flow & Breathwork Class", afternoon: "Herbal Bath & Hydrotherapy", evening: "Mindful Forest Walking Tour" },
-      { morning: "Detox Yoga & Chakra Healing", afternoon: "Ayurvedic Massages", evening: "Sunset Tea Ceremony & Reflection" }
+      { morning: "Sunrise Pranayama & Outdoor Vinyasa Yoga", afternoon: "Organic Detox Lunch & Hydrotherapy Spa", evening: "Guided Sound Bath & Breathwork Session" },
+      { morning: "Chakra Healing & Gentle Stretching Class", afternoon: "Traditional Herbal Steam Bath & Recovery Massage", evening: "Mindful Forest Bathing Walking Tour" },
+      { morning: "Detox Yoga Flow & Meditation", afternoon: "Ayurvedic Spa & Essential Oil Therapy", evening: "Sunset Herbal Tea Ceremony" }
     ],
     "Health Tourism": [
-      { morning: "Health Check-up & Consultation", afternoon: "Therapeutic Hydrotherapy Session", evening: "Nutritional Advisory & Rest" },
-      { morning: "Holistic Physical Therapy", afternoon: "Herbal Treatment & Body Recovery", evening: "Relaxing Botanical Walk" },
-      { morning: "Post-Treatment Wellness Followup", afternoon: "Meditation & Mind Rest Routine", evening: "Light Wellness Cuisine Dinner" }
+      { morning: "Health Assessment & Specialist Consultation", afternoon: "Therapeutic Hydrotherapy & Spa Session", evening: "Personalized Nutrition Advisory & Rest" },
+      { morning: "Holistic Physical Therapy Session", afternoon: "Herbal Body Healing & Infrared Sauna", evening: "Relaxing Botanical Garden Walk" },
+      { morning: "Post-Treatment Wellness Followup", afternoon: "Mind Rest Routine & Hydro-Soak Therapy", evening: "Light Healthy Wellness Dinner" }
     ]
   };
 
@@ -135,38 +253,44 @@
     const purpose = document.getElementById('purpose').value;
     const days = parseInt(document.getElementById('days').value);
 
-    const resultBody = document.getElementById('itineraryBody');
-    resultBody.innerHTML = '';
+    const timeline = document.getElementById('timelineContent');
+    timeline.innerHTML = '';
 
     const templates = activityData[purpose];
     
     for (let i = 1; i <= days; i++) {
-      const dayTemplate = templates[(i - 1) % templates.length];
+      const dayData = templates[(i - 1) % templates.length];
       
-      const row = `
-        <tr>
-          <td rowspan="3" style="font-weight:bold; vertical-align:top; background:#fafafa;">Day ${i}</td>
-          <td><span class="badge">Morning</span></td>
-          <td>${dayTemplate.morning} in ${dest}</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Afternoon</span></td>
-          <td>${dayTemplate.afternoon}</td>
-        </tr>
-        <tr>
-          <td><span class="badge">Evening</span></td>
-          <td>${dayTemplate.evening}</td>
-        </tr>
+      const dayBlock = `
+        <div class="day-card">
+          <div class="day-title"><i class="fa-solid fa-calendar-day"></i> Day ${i}</div>
+          <div class="slot-item">
+            <span class="slot-badge morning"><i class="fa-solid fa-sun"></i> Morning</span>
+            <span class="slot-desc">${dayData.morning} in ${dest}</span>
+          </div>
+          <div class="slot-item">
+            <span class="slot-badge afternoon"><i class="fa-solid fa-cloud-sun"></i> Afternoon</span>
+            <span class="slot-desc">${dayData.afternoon}</span>
+          </div>
+          <div class="slot-item">
+            <span class="slot-badge evening"><i class="fa-solid fa-moon"></i> Evening</span>
+            <span class="slot-desc">${dayData.evening}</span>
+          </div>
+        </div>
       `;
-      resultBody.innerHTML += row;
+      timeline.innerHTML += dayBlock;
     }
 
-    document.getElementById('resultTitle').innerText = `Itinerary for ${dest}`;
-    document.getElementById('resultMeta').innerText = `Traveller: ${gender} | Purpose: ${purpose} | Duration: ${days} Day(s)`;
-    document.getElementById('results').style.display = 'block';
+    document.getElementById('resultTitle').innerHTML = `<i class="fa-solid fa-plane-departure"></i> Itinerary for ${dest}`;
+    document.getElementById('pillGender').innerText = `👤 ${gender}`;
+    document.getElementById('pillPurpose').innerText = `🎯 ${purpose}`;
+    document.getElementById('pillDays').innerText = `📅 ${days} Day(s)`;
+    
+    const results = document.getElementById('results');
+    results.style.display = 'block';
+    results.scrollIntoView({ behavior: 'smooth' });
   });
 </script>
 
 </body>
 </html>
-
